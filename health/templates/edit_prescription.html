@@ -1,0 +1,39 @@
+<form action="{% url 'health:edit_prescription' prescription.pk %}" method="post" accept-charset="utf-8" class="form" role="form">
+    {% csrf_token %}
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="add-prescription">Add a Prescription</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-sm-6">
+                <legend>Name</legend>
+                <input class="form-control" name="name" placeholder="Ibuprofen"  {% if prescription %}value="{{ prescription.name }}" {% endif %}/>
+            </div>
+            <div class="col-sm-6">
+                <legend>Dosage</legend>
+                <input class="form-control" name="dosage" placeholder="30"  {% if prescription %}value="{{ prescription.dosage }}" {% endif %}/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <legend>Directions</legend>
+                <input class="form-control" name="directions" placeholder="Take twice a day while symptoms persist." {% if prescription %}value="{{ prescription.directions }}" {% endif %}/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-8">
+                <legend>Patient</legend>
+                <select name="patient" class='form-control'>
+                    {% for patient in user.active_patients %}
+                        <option value="{{ patient.pk }}" {% if prescription.patient == patient %}selected="selected"{% endif %}>{{ patient.get_full_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button class="btn btn-primary" type="submit">Save</button>
+    </div>
+</form>

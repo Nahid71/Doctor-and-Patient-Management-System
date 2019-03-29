@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <h3>Welcome to <em>Health<strong>Net</strong></em>, {{ user.get_full_name }}!</h3>
+    <hr />
+    <h4>You have {{ unread_count }} unread message{% if unread_count != 1 %}s{% endif %}.</h4>
+    <hr />
+    {% if user.upcoming_appointments.all %}
+        <table class="table table-bordered table-striped">
+            <legend>This week's appointments for {% include 'user_link.html' %}</legend>
+            <thead>
+            <tr>
+                {% if user.is_patient or user.is_nurse %}
+                    <th>Doctor</th>
+                {% endif %}
+                {% if user.is_doctor or user.is_nurse %}
+                    <th>Patient</th>
+                {% endif %}
+                <th>Date</th>
+                <th>Duration</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for appointment in user.upcoming_appointments.all %}
+                <tr>
+                    {% if user.is_patient or user.is_nurse %}
+                        <td>{% include 'user_link.html' with user=appointment.doctor %}</td>
+                    {% endif %}
+                    {% if user.is_doctor or user.is_nurse %}
+                        <td>{% include 'user_link.html' with user=appointment.patient %}</td>
+                    {% endif %}
+                    <td>{{ appointment.date }}</td>
+                    <td>{{ appointment.duration }} minutes</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h4>You have no appointments this week.</h4>
+    {% endif %}
+    <hr />
+    {% if user.active_prescriptions and not user.can_add_prescription %}
+        <table class="table table-bordered table-striped">
+            <legend>Prescriptions for {% include 'user_link.html' %}</legend>
+            <thead>
+            <tr>
+                <th>Dosage</th>
+                <th>Name</th>
+                <th>Directions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for prescription in user.active_prescriptions %}
+                <tr>
+                    <td>{{ prescription.dosage }}</td>
+                    <td>{{ prescription.name }}</td>
+                    <td>{{ prescription.directions }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h4>You have no active prescriptions.</h4>
+    {% endif %}
+    <hr />
+{% endblock %}

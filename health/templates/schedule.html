@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Schedule{% endblock %}
+{% block content %}
+    <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+    {% if not user.is_nurse %}
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#edit" data-remote="{% url 'health:add_appointment' %}">
+            Add an Appointment
+        </button>
+        <br />
+    {% endif %}
+    <hr />
+    {% include 'error.html' %}
+    {% if schedule_future %}
+        <table class="table table-bordered table-striped">
+            <legend>Upcoming appointments for {% include 'user_link.html' %}</legend>
+            {% include 'appointment_table.html' with schedule=schedule_future editable=True %}
+        </table>
+    {% else %}
+        <h2 class="text-center">No upcoming appointments.</h2>
+    {% endif %}
+    <hr>
+    {% if schedule_past %}
+        <table class="table table-bordered table-striped">
+            <legend>Past appointments for {% include 'user_link.html' %}</legend>
+            {% include 'appointment_table.html' with schedule=schedule_past editable=False %}
+        </table>
+    {% else %}
+        <h2 class="text-center">No past appointments.</h2>
+    {% endif %}
+    <hr />
+    <script>
+        // Remove modal data when it's closed.
+        $(document).on('hidden.bs.modal', function (e) {
+            $(e.target).removeData('bs.modal');
+        });
+    </script>
+{% endblock %}

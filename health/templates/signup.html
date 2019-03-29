@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}Sign Up{% endblock %}
+{% block legend %}Sign Up{% endblock %}
+
+{% block extra %}
+    <link rel="stylesheet" href="{% static 'signup.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="form-wrap">
+        <div class="col-md-10 col-md-offset-1">
+            <legend>Sign Up</legend>
+            {% include 'edit_user.html' %}
+        </div>
+    </div>
+{% endblock %}
+

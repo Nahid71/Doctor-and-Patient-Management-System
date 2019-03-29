@@ -1,0 +1,26 @@
+<thead>
+<tr>
+    <th>Patient</th>
+    <th>Doctor</th>
+    <th>Date</th>
+    <th>Duration</th>
+    {% if editable %}
+        <th>Edit</th>
+        <th>Cancel</th>
+    {% endif %}
+</tr>
+</thead>
+<tbody>
+{% for appointment in schedule %}
+    <tr>
+        <td>{% include 'user_link.html' with user=appointment.patient %}</td>
+        <td>{% include 'user_link.html' with user=appointment.doctor %}</td>
+        <td>{{ appointment.date }}</td>
+        <td>{{ appointment.duration }} minutes</td>
+        {% if editable %}
+            <td><p title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-remote="{% url 'health:edit_appointment' appointment.pk %}" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+            <td><p title="Delete"><a class="btn btn-danger btn-xs" data-title="Delete" href="{% url 'health:delete_appointment' appointment.pk %}"><span class="glyphicon glyphicon-trash"></span></a></p></td>
+        {% endif %}
+    </tr>
+{% endfor %}
+</tbody>

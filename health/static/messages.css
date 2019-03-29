@@ -1,0 +1,32 @@
+.indent {
+    margin-left: 10px;
+}
+
+.bottom-padded {
+    margin-bottom: 10px;
+}
+
+.text-preview {
+    color: #888;
+}
+
+.date-badge {
+    float: right;
+    position: relative;
+    top: 2px;
+    right: 10px;
+}
+
+.message-content {
+    margin: 5px 10px;
+}
+
+.your-message {
+    background-color: #f3f3f3;
+}
+
+form {
+    padding-left: 0;
+    padding-right: 0;
+    border-right-width: 0;
+}

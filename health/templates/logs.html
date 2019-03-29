@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}System Logs{% endblock %}
+
+{% block content %}
+    <div>
+        <h2 class="text-center">System Stats</h2>
+        <br />
+        <h4>{{ user.hospital.name }}</h4>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <strong>{{ stats.stay_count }}</strong> total admission{% if stats.stay_count != 1 %}s{% endif %}
+                <ul>
+                    <li>
+                        <strong>{{ stats.discharge_count }}</strong> total discharge{% if stats.discharge_count != 1 %}s{% endif %}
+                    </li>
+                    <li>
+                        <strong>{{ stats.average_stay }}</strong> average stay duration
+                    </li>
+                </ul>
+                <strong>{{ stats.user_count }}</strong> admitted user{% if stats.user_count != 1 %}s{% endif %}
+                <ul>
+                    <li>
+                        <strong>{{ stats.patient_count }}</strong> patient{% if stats.patient_count != 1 %}s{% endif %}
+                    </li>
+                    <li>
+                        <strong>{{ stats.doctor_count }}</strong> doctor{% if stats.doctor_count != 1 %}s{% endif %}
+                    </li>
+                    <li>
+                        <strong>{{ stats.nurse_count }}</strong> nurse{% if stats.nurse_count != 1 %}s{% endif %}
+                    </li>
+                    <li>
+                        <strong>{{ stats.admin_count }}</strong> administrator{% if stats.admin_count != 1 %}s{% endif %}
+                    </li>
+                </ul>
+            </li>
+            <li class="list-group-item">
+                <strong>{{ stats.prescription_count }}</strong> total prescription{% if stats.prescription_count != 1 %}s{% endif %} issued
+                <ul>
+                    <li>
+                        <strong>{{ stats.active_prescription_count }}</strong> active prescription{% if stats.activeprescription_count != 1 %}s{% endif %} issued
+                    </li>
+                <li>
+                    <strong>{{ stats.expired_prescription_count }}</strong> expired prescription{% if stats.expiredprescription_count != 1 %}s{% endif %} issued
+                </li>
+                </ul>
+            </li>
+            <li class="list-group-item">
+                <strong>{{ stats.appointment_count }}</strong> appointment{% if stats.appointment_count != 1 %}s{% endif %}
+                <ul>
+                    <li>
+                        <strong>{{ stats.upcoming_appointment_count }}</strong> upcoming appointment{% if stats.upcoming_appointment_count != 1 %}s{% endif %}
+                    </li>
+                    <li>
+                        <strong>{{ stats.past_appointment_count }}</strong> past appointment{% if stats.past_appointment_count != 1 %}s{% endif %}
+                    </li>
+                </ul>
+            </li>
+            <li class="list-group-item">
+                <strong>{{ stats.conversation_count }}</strong> conversation{% if stats.conversation_count != 1 %}s{% endif %}
+                <ul>
+                    <li>
+                        <strong>{{ stats.message_count }}</strong> total message{% if stats.messaget_count != 1 %}s{% endif %}
+                    </li>
+                    <li>
+                        Average <strong>{{ stats.average_message_count }}</strong> message{% if stats.average_message_count != 1 %}s{% endif %} per conversation
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <br />
+    <h2 class="text-center">System Logs</h2>
+    <br />
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead></thead>
+            <tbody>
+            {% for log in logs %}
+                <tr>
+                    <td class="nowrap">{{ log.action_time }}</td>
+                    <td><a href="{% url 'health:medical_information' log.user.pk %}">{{ log.user.get_full_name }}</a> ({{ log.user.email }}) {{ log }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

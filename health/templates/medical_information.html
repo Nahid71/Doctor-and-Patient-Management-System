@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ requested_user.get_full_name }}'s Medical Information{% endblock %}
+
+{% block content %}
+    {% if user.is_superuser or requested_user.is_patient %}
+        <div class="modal fade" id="privacy" tabindex="-1" role="dialog" aria-labelledby="privacy" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        Warning
+                    </div>
+                    <div class="modal-body">
+                        This information is potentially sensitive, and Health<strong>Net</strong> assumes no liability for privacy breaches resulting from misuse of this exported data.
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default close-modal">
+                            Cancel
+                        </button>
+                        <a class="btn btn-primary close-modal" href="{% url 'health:export' requested_user.pk %}" >
+                            Okay
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            // close the modal on click for any button with class close-modal
+            $('.close-modal').click(function(){
+                $($(this).closest('.modal')).modal('hide');
+            })
+        </script>
+    {% endif %}
+    {% include 'edit_user.html' %}
+    <button class="btn btn-primary" data-toggle="modal" data-target="#privacy">
+        Export
+    </button>
+    <p>
+{% endblock %}

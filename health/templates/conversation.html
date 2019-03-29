@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block extra %}
+    <link rel="stylesheet" href="{% static 'messages.css' %}">
+{% endblock %}
+
+{% block title %}{{ message_names }}{% endblock %}
+
+{% block content %}
+    <a class="btn btn-primary" href="{% url 'health:messages' %}"><i class="fa fa-chevron-left"></i>&nbsp;Back</a>
+    <h4>{{ group.name }}</h4>
+    <div class="list-group">
+        {% for message in group.messages.all %}
+            <div class="list-group-item {% if message.sender == user %}your-message{% endif %}">
+                <div class="message-content">
+                    <div class="row">
+                        <strong>{{ message.sender.get_full_name }}</strong>
+                        <span class="badge date-badge">{{ message.date }}</span>
+                    </div>
+                    <br />
+                    <div class="row">
+                        {{ message.body|linebreaks }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <form action="" method="post" accept-charset="utf-8" class="">
+        {% csrf_token %}
+        <label for="message">New Message</label>
+        <textarea id="message" class="form-control" name="message"></textarea>
+        <button type="submit" class="btn btn-primary">Send</button>
+    </form>
+{% endblock %}

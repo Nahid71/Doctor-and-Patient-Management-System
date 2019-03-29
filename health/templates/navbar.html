@@ -1,0 +1,60 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'health:home' %}">ED<strong>&P</strong></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                {% if user.is_authenticated %}
+                <li class="{% ifequal navbar 'home'%}active{% endifequal %}"><a href="{% url 'health:home' %}"><i
+                            class="fa fa-home"></i>&nbsp;Home</a></li>
+                <li class="{% ifequal navbar 'schedule'%}active{% endifequal %}"><a
+                        href="{% ifequal navbar 'schedule'%}#{% else %}{% url 'health:schedule' %}{% endifequal %}"><i
+                            class="fa fa-calendar"></i>&nbsp;Schedule</a></li>
+                {% if not user.is_patient or user.is_superuser %}
+                <li class="{% ifequal navbar 'prescriptions'%}active{% endifequal %}"><a
+                        href="{% ifequal navbar 'prescriptions'%}#{% else %}{% url 'health:prescriptions' %}{% endifequal %}"><i
+                            class="fa fa-medkit"></i>&nbsp;Prescriptions</a></li>
+                {% endif %}
+                {% if not user.is_superuser %}
+                <li class="{% ifequal navbar 'my_medical_information'%}active{% endifequal %}"><a
+                        href="{% ifequal navbar 'my_medical_information'%}#{% else %}{% url 'health:my_medical_information' %}{% endifequal %}"><i
+                            class="fa fa-heart"></i>&nbsp;Medical Information</a></li>
+                {% endif %}
+                <li class="{% ifequal navbar 'messages'%}active{% endifequal %}"><a
+                        href="{% ifequal navbar 'messages'%}#{% else %}{% url 'health:messages' %}{% endifequal %}"><i
+                            class="fa fa-envelope"></i>&nbsp;Messages{% if user.unread_message_count > 0 %}<span
+                            style="margin-left: 5px;"
+                            class="badge">{{ user.unread_message_count }}</span>{% endif %}</a></li>
+                {% if user.is_superuser %}
+                <li class="{% ifequal navbar 'logs'%}active{% endifequal %}"><a
+                        href="{% ifequal navbar 'logs'%}#{% else %}{% url 'health:logs' %}{% endifequal %}"><i
+                            class="fa fa-list"></i>&nbsp;System</a></li>
+                <li class="{% ifequal navbar 'users'%}active{% endifequal %}"><a
+                        href="{% ifequal navbar 'users'%}#{% else %}{% url 'health:users' %}{% endifequal %}"><i
+                            class="fa fa-user"></i>&nbsp;Users</a></li>
+                {% endif %}
+                {% endif %}
+            </ul>
+            {% if user.is_authenticated %}
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <p class="navbar-text">{{ user.get_full_name }}</p>
+                </li>
+                <li><a href="{% url 'health:logout' %}"><i class="fa fa-sign-out"></i>&nbsp;Sign Out</a></li>
+            </ul>
+            {% elif navbar != 'login' %}
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="{% url 'health:login' %}"><i class="fa fa-sign-in"></i>&nbsp;Sign In</a></li>
+            </ul>
+            {% endif %}
+        </div>
+    </div>
+</nav>

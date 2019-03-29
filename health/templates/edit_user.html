@@ -1,0 +1,135 @@
+{% include 'error.html' %}
+<div class="row">
+    <form action="" method="post" accept-charset="utf-8" class="form" role="form">
+        {% csrf_token %}
+
+        <label>Name</label>
+        <div class="row">
+            <div class="col-xs-6 col-md-6">
+                <input type="text" name="first_name" value="{{ requested_user.first_name }}" class="form-control" placeholder="First Name" required />
+            </div>
+            <div class="col-xs-6 col-md-6">
+                <input type="text" name="last_name" value="{{ requested_user.last_name }}" class="form-control" placeholder="Last Name"  required />
+            </div>
+        </div>
+        <label>Email</label>
+        <input type="text" name="email" value="{{ requested_user.email }}" class="form-control" placeholder="Email" required = "" />
+
+        <label>Phone Number</label>
+        <input type="text" name="phone_number" value="{{ requested_user.phone_number }}"  class="form-control" placeholder="Phone Number" required = "" />
+        {% if is_signup %}
+            <label>Password</label>
+            <input type="password" name="password" class="form-control password" placeholder="Password"  required = "" />
+            <input type="password" name="confirm_password" class="form-control confirm-password" placeholder="Confirm Password" required = "" />
+        {% endif %}
+        <br />
+        {% if is_signup or requested_user.medical_information %}
+            <label>Insurance Information</label>
+            <div class="row">
+                <div class="col-xs-6 col-md-6">
+                    <input type="text" name="company" value="{{ requested_user.medical_information.insurance.company }}" class="form-control" placeholder="Company"  />
+                </div>
+                <div class="col-xs-6 col-md-6">
+                    <input type="text" name="policy" value="{{ requested_user.medical_information.insurance.policy_number }}" class="form-control" placeholder="Policy Number"  />
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col xs-6 col-md-6">
+                    <label>Family History</label>
+                    <textarea name="family_history" class="form-control" placeholder="Any medical conditions that may run in your family.">{{ requested_user.medical_information.family_history }}</textarea>
+                </div>
+                <div class="col xs-6 col-md-6">
+                    <label>Biological Sex</label>
+                    {% for sex in sexes %}
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="sex" id="{{ forloop.counter }}" value="{{ sex }}" {% ifequal sex requested_user.medical_information.sex %}checked{% endifequal %}>
+                                {{ sex }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                    <div class="input-group">
+                                <span class="input-group-addon">
+                                    <input type="radio" name="sex" aria-label="" {% if user_sex_other %}checked{% endif %}>
+                                </span>
+                        <input type="text" name="other_sex" class="form-control" aria-label="other-sex" placeholder="Other (specify)" {% if user_sex_other %}value="{{ requested_user.medical_information.sex }}"{% endif %}/>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col xs-6 col-md-6">
+                    <label>Allergies</label>
+                    <textarea name="allergies" class="form-control" placeholder="Pollen, Ammoxicillin, ...">{{ requested_user.medical_information.allergies }}</textarea>
+                </div>
+                <div class="col xs-6 col-md-6">
+                    <label>Medications</label>
+                    <textarea name="medications" class="form-control" placeholder="Any medications you take on a regular basis">{{ requested_user.medical_information.medications }}</textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col xs-6 col-md-6">
+                    <label>Medical Conditions</label>
+                    <textarea name="medical_conditions" class="form-control" placeholder="Any existing medical conditions you have or have had in the past">{{ requested_user.medical_information.medical_conditions }}</textarea>
+                </div>
+                <div class="col xs-6 col-md-6">
+                    <label>Additional Information</label>
+                    <textarea name="additional_info" class="form-control" placeholder="Any additional information you'd like to provide">{{ requested_user.medical_information.additional_info }}</textarea>
+                </div>
+            </div>
+        {% endif %}
+        <label>Birth Date</label>
+        <div class="row">
+            <div class="col-xs-4 col-md-4">
+                <select name="month" class="form-control">
+                    {% for month in months %}
+                        <option {% if requested_user.date_of_birth.month == forloop.counter %}selected="selected"{% endif %} value="{{ forloop.counter }}">{{ month }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-xs-4 col-md-4">
+                <select name="day" class="form-control">
+                    {% for day in day_range %}
+                        <option {% if requested_user.date_of_birth.day == day %}selected="selected"{% endif %} value="{{ day }}">{{ day }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-xs-4 col-md-4">
+                <select name="year" class="form-control">
+                    {% for year in year_range %}
+                        <option {% if requested_user.date_of_birth.year == year %}selected="selected"{% endif %} value="{{ year }}">{{ year }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            {% if user.is_superuser %}
+                <div class="col-lg-4">
+                    <label>Account Type</label>
+                    <select name="group" class="form-control">
+                        {% for group in groups %}
+                            <option value="{{ group.pk }}" {% if requested_user.group == group %}selected="selected"{% endif %}>{{ group.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
+            {% if is_signup or user.is_superuser %}
+                <div class="col-lg-{% if user.is_superuser %}8{% else %}12{% endif %}">
+                    <label>Hospital</label>
+                    <select name="hospital" class="form-control">
+                        {% for hospital in hospitals %}
+                            <option value="{{ hospital.pk }}" {% if requested_hospital == hospital %}selected="selected"{% endif %}>{{ hospital.name }} at {{ hospital.address }}, {{ hospital.city }}, {{ hospital.state }} {{ hospital.zipcode }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <br />
+            {% endif %}
+        </div>
+        <br />
+        <button class="btn btn-lg btn-primary btn-block signup-btn" type="submit">
+            Save
+        </button>
+    </form>
+</div>

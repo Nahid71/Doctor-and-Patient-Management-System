@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Prescriptions{% endblock %}
+{% block content %}
+    {% include 'error.html' %}
+    {% if user.active_patients %}
+        <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            {% if logged_in_user.can_add_prescription %}
+                <button class="btn btn-primary" data-toggle="modal" data-target="#edit" data-remote="{% url 'health:add_prescription' %}">Add a Prescription</button>
+                <hr />
+                {% for user in user.active_patients %}
+                    {% if user.active_prescriptions %}
+                        <table class="table table-bordered table-striped">
+                            <legend>Prescriptions for {% include 'user_link.html' %}</legend>
+                            <thead>
+                            <tr>
+                                <th>Dosage</th>
+                                <th>Name</th>
+                                <th>Directions</th>
+                                {% if logged_in_user.can_add_prescription %}
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                {% endif %}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for prescription in user.active_prescriptions %}
+                                <tr>
+                                    <td>{{ prescription.dosage }}</td>
+                                    <td>{{ prescription.name }}</td>
+                                    <td>{{ prescription.directions }}</td>
+
+                                    {% if logged_in_user.can_add_prescription %}
+                                        <td><p title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-remote="{% url 'health:edit_prescription' prescription.pk %}" data-toggle="modal" data-target="#edit"><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+                                        <td><p title="Delete"><a class="btn btn-danger btn-xs" data-title="Delete" href="{% url 'health:delete_prescription' prescription.pk %}"><span class="glyphicon glyphicon-trash"></span></a></p></td>
+                                    {% endif %}
+
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <div class="text-center">
+                            <h2> No prescriptions for {% include 'user_link.html' %}</h2>
+                        </div>
+                    {% endif %}
+                    <hr />
+                {% endfor %}
+            {% endif %}
+        </div>
+    {% else %}
+        <h2 class="text-center"> No active patients in hospital. </h2>
+    {% endif %}
+    <script>
+        // Remove the data from the modal when it's closed.
+        $(document).on('hidden.bs.modal', function (e) {
+            $(e.target).removeData('bs.modal');
+        });
+    </script>
+{% endblock %}

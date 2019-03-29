@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block extra %}
+    <link rel="stylesheet" href="{% static 'messages.css' %}">
+    <link rel="stylesheet" href="{% static 'multiselect.css' %}">
+    <script src="{% static 'multiselect.js' %}"></script>
+{% endblock %}
+
+{% block title %}Messages{% endblock %}
+
+{% block content %}
+    <div class="modal fade" id="send" tabindex="-1" role="dialog" aria-labelledby="send" aria-hidden="true">
+        <div class="modal-dialog">
+            <form action="{% url 'health:add_group' %}" method="post" accept-charset="utf-8" class="form" role="form">
+                {% csrf_token %}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        Send Message
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="name">Conversation Name</label>
+                                    <input id="name" type="text" class="form-control" name="name" placeholder="Discussion about Test Results">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="recipient">Recipient</label>
+                                    <select multiple="multiple" id="recipient" name="recipient" class='form-control'>
+                                        {% for user in recipients %}
+                                            <option name="recipient" value="{{ user.pk }}">{{ user.get_full_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="message">Message</label>
+                                    <textarea class='form-control' name="message" placeholder="Dear Doctor, I have a question..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="send" class="btn btn-default" onclick="close_modal()">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary close-modal">
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% include 'error.html' %}
+    <button class="btn btn-primary bottom-padded" data-toggle="modal" data-target="#send">
+        Send Message
+    </button>
+    <hr />
+    <div class="list-group">
+        {% if groups %}
+            {% for group in groups %}
+                <a href="{% url 'health:conversation' group.pk %}" class="list-group-item">
+                    <div class="indent">
+                        {% if group.latest_message %}
+                            <span class="badge date-badge">{{ group.latest_message.date }}</span>
+                        {% endif %}
+                        {% if group.has_unread %}<strong>{% endif %}
+                        <span class="name">
+                            {{ group.combined_names }}
+                        </span>
+                        - <em>{{ group.name }}</em>
+                        {% if group.has_unread %}</strong>{% endif %}
+                    </div>
+                    <div class="indent">
+                        {% if group.latest_message %}
+                            <span class="text-preview"><em>{% if group.latest_message.sender == user %}You: {% endif %}{{ group.latest_message.preview_text }}</em></span>
+                        {% else %}
+                            <span class="text-preview"><em>No Messages</em></span>
+                        {% endif %}
+                    </div>
+                </a>
+            {% endfor %}
+        {% else %}
+            <h2 style="text-align: center">No messages.</h2>
+        {% endif %}
+        <hr />
+        <script>
+            $('#recipient').multiselect();
+
+            function close_modal() {
+                $('#send').modal('hide');
+            }
+        </script>
+    </div>
+{% endblock %}

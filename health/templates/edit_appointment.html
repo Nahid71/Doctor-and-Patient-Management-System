@@ -1,0 +1,55 @@
+<form action="{% if appointment %}{% url 'health:edit_appointment' appointment.pk %}{% else %}{% url 'health:add_appointment' %}{% endif %}" method="post" accept-charset="utf-8" class="form" role="form">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="add-appointment">Add an Appointment</h4>
+    </div>
+    <div class="modal-body">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <label>Time and Date</label>
+                <div class='input-group' id='datetimepicker'>
+                    <input type='datetime-local' class="form-control" name="date" value="{{ appointment.date|date:"c"}}" />
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-xs-8 col-md-8">
+                <label>Duration</label>
+                <div class="input-group" id="duration">
+                    <input type="number" name="duration" class="form-control" value="{% if appointment %}{{ appointment.duration }}{% else %}30{% endif %}" />
+                    <span class="input-group-addon">minutes</span>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            {% if user.is_patient or user.is_superuser %}
+                <div class="col-xs-6 col-md-6">
+                    <label>Doctor</label>
+                    <select name="doctor" class="form-control">
+                        {% for doctor in doctors %}
+                            <option value="{{ doctor.pk }}">{{ doctor.get_full_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
+            {% if user.is_doctor or user.is_superuser %}
+                <div class="col-xs-6 col-md-6">
+                    <label>Patient</label>
+                    <select name="patient" class="form-control">
+                        {% for patient in patients %}
+                            <option value="{{ patient.pk }}">{{ patient.get_full_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button class="btn btn-primary" type="submit">Save</button>
+    </div>
+</form>
