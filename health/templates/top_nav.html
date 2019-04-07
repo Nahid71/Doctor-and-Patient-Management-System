@@ -9,20 +9,23 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <h1><a class="navbar-brand " href="#home">ED&P</a></h1>
+            <h1><a class="navbar-brand " href="{% url 'health:home1'%}"><i class="fas fa-stethoscope"></i>&nbsp;ED&P</a>
+            </h1>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav navbar-right">
                 <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
                 <li class="hidden"><a class="page-scroll" href="#page-top"></a> </li>
-                <li><a class="page-scroll" href="#home">Home</a></li>
-                <li><a class="page-scroll scroll" href="#about">About</a></li>
-                <li><a class="page-scroll scroll" href="#service">Facilities</a></li>
-                <li><a class="page-scroll scroll" href="#gallery">Laboratory</a></li>
-                <li><a class="page-scroll scroll" href="#clients">Clients</a></li>
-                <li><a class="page-scroll scroll" href="#contact">Contact</a></li>
-                <li><a class="" href="{% url 'health:login' %}">Login</a></li>
+                <li><a class="page-scroll" href="#home"><i class="fa fa-home"></i>&nbsp;Home</a></li>
+                <li><a class="page-scroll scroll" href="#about"><i class="fas fa-address-card"></i>&nbsp;About</a></li>
+                <li><a class="page-scroll scroll" href="#service"><i class="fas fa-user-md"></i>&nbsp;Facilities</a>
+                </li>
+
+                <li><a class="page-scroll scroll" href="#clients"><i class="fas fa-users"></i>&nbsp;Clients</a></li>
+                <li><a class="page-scroll scroll" href="#contact"><i class="far fa-address-book"></i>&nbsp;Contact</a>
+                </li>
+                <li><a class="" href="{% url 'health:login' %}"><i class="fas fa-sign-out-alt"></i>&nbsp;Login</a></li>
             </ul>
         </div>
         <!-- /.navbar-collapse -->

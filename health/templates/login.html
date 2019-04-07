@@ -4,27 +4,28 @@
 {% block title %}Sign In{% endblock %}
 
 {% block extra %}
-    <link rel="stylesheet" href="{% static 'login.css' %}">
+<link rel="stylesheet" href="{% static 'login.css' %}">
 {% endblock %}
 
 {% block content %}
-    <div class="form-wrap">
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3">
-                <form class="sign-in" action="{% url 'health:login' %}" method="post">
-                    {% include 'error.html' %}
-                    {% csrf_token %}
-                    <legend>Sign In</legend>
-                    <input type="text" class="form-control" name="email" placeholder="Email" required autofocus />
-                    <input type="password" class="form-control" name="password" placeholder="Password" required/>
-                    <label class="checkbox">
-                        <input class="checkbox" type="checkbox" name="remember" checked/>&nbsp;Remember Me
-                    </label>
+<div class="form-wrap">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <form class="sign-in" action="{% url 'health:login' %}" method="post">
+                {% include 'error.html' %}
+                {% csrf_token %}
+                <legend>Sign In</legend>
+                <input type="text" class="form-control" name="email" placeholder="Email" required autofocus />
+                <input type="password" class="form-control" name="password" placeholder="Password" required />
+                <label class="checkbox">
+                    <input class="checkbox" type="checkbox" name="remember" checked />&nbsp;Remember Me
+                </label>
+                <div class="raw">
                     <button class="btn btn-primary" type="submit">Sign In</button>
                     <a class="btn btn-info" href="{% url 'health:signup' %}" role="button">Sign Up</a>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 {% endblock %}
-

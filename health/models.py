@@ -73,12 +73,15 @@ class MedicalInformation(models.Model):
             self.family_history, self.additional_info
         ))
 
+    def __str__(self):
+        return "{0} is {1} of him/her".format(self.sex, self.insurance)
+
 
 class Hospital(models.Model):
     name = models.CharField(max_length=200)
     address = models.CharField(max_length=200)
     city = models.CharField(max_length=200)
-    country = models.CharField(max_length=2)
+    state = models.CharField(max_length=30)
     zipcode = models.CharField(max_length=20)
 
     def json_object(self):
@@ -86,14 +89,14 @@ class Hospital(models.Model):
             'name': self.name,
             'address': self.address,
             'city': self.city,
-            'country': self.country,
+            'state': self.state,
             'zipcode': self.zipcode,
         }
 
     def __repr__(self):
         # "St. Jude Hospital at 1 Hospital Road, Waterbury, CT 06470"
         return ("%s at %s, %s, %s %s" % self.name, self.address, self.city,
-                self.country, self.zipcode)
+                self.state, self.zipcode)
 
     def __str__(self):
         return "{0} with {1}".format(self.name, self.address)
@@ -130,10 +133,13 @@ class User(AbstractUser):
     phone_number = models.CharField(max_length=30)
     medical_information = models.ForeignKey(MedicalInformation, null=True)
     emergency_contact = models.ForeignKey(EmergencyContact, null=True)
-    thumbnail = models.ImageField(null=True, blank=True)
+    thumbnail = models.URLField(null=True, blank=True)
 
     REQUIRED_FIELDS = ['date_of_birth', 'phone_number', 'email', 'first_name',
                        'last_name']
+
+    def __str__(self):
+        return " {0}".format(self.first_name)
 
     def all_patients(self):
         """
@@ -270,7 +276,8 @@ class User(AbstractUser):
             json['prescriptions'] = [p.json_object() for p in
                                      self.prescription_set.all()]
         if self.schedule():
-            json['appointments'] = [a.json_object() for a in self.schedule().all()]
+            json['appointments'] = [a.json_object()
+                                    for a in self.schedule().all()]
         return json
 
     def hospital(self):
@@ -306,12 +313,18 @@ class Appointment(models.Model):
         return '{0} minutes on {1}, {2} with {3}'.format(self.duration, self.date,
                                                          self.patient, self.doctor)
 
+    def __str__(self):
+        return " {0} appionment with {1}".format(self.patient, self.doctor)
+
 
 class HospitalStay(models.Model):
     patient = models.ForeignKey(User)
     admission = models.DateTimeField()
     discharge = models.DateTimeField(null=True)
     hospital = models.ForeignKey(Hospital)
+
+    def __str__(self):
+        return "{0} stay in  {1}".format(self.patient, self.hospital)
 
 
 class Prescription(models.Model):
@@ -333,6 +346,9 @@ class Prescription(models.Model):
 
     def __repr__(self):
         return '{0} of {1}: {2}'.format(self.dosage, self.name, self.directions)
+
+    def __str__(self):
+        return "{0} for {1}".format(self.name, self.patient)
 
 
 class MessageGroup(models.Model):
@@ -365,3 +381,25 @@ class Message(models.Model):
 
     def preview_text(self):
         return (self.body[:100] + "...") if len(self.body) > 100 else self.body
+
+
+class Subscription(models.Model):
+
+    email = models.CharField(max_length=200)
+
+    def __str__(self):
+        """Unicode representation of Subscription."""
+        return self.email
+
+
+class Contact(models.Model):
+
+    first_name = models.CharField(max_length=200)
+    last_name = models.CharField(max_length=200)
+    email = models.CharField(max_length=200)
+    phone = models.IntegerField(null=True, blank=True)
+    message = models.TextField()
+
+    def __str__(self):
+        """Unicode representation of Subscription."""
+        return "{0} for {1}".format(self.first_name, self.last_name)

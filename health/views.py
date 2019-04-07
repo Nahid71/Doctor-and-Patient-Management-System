@@ -72,7 +72,7 @@ def logout_view(request):
     :return: A 301 redirect to the login page.
     """
     logout(request)
-    return redirect('health:login')
+    return redirect('health:home1')
 
 
 def handle_prescription_form(request, body, prescription=None):
@@ -332,6 +332,7 @@ def handle_user_form(request, body, user=None):
     medical_conditions = body.get("medical_conditions")
     family_history = body.get("family_history")
     additional_info = body.get("additional_info")
+    pic = body.get("pic")
     if not all([first_name, last_name, email, phone,
                 month, day, year, date]):
         return None, "All fields are required."
@@ -404,7 +405,7 @@ def handle_user_form(request, body, user=None):
             additional_info=additional_info, insurance=insurance,
             medical_conditions=medical_conditions
         )
-        user = User.objects.create_user(email, email=email,
+        user = User.objects.create_user(email, email=email,thumbnail=pic,
                                         password=password, date_of_birth=date, phone_number=phone,
                                         first_name=first_name, last_name=last_name,
                                         medical_information=medical_information)
@@ -641,7 +642,31 @@ def logs(request):
 
 
 def home1(request):
-    return render(request, 'index1.html',)
+    user = User.objects.all()
+    context = {
+        'user':user
+    }
+    if request.method =="POST": 
+        if 'subs' in request.POST: 
+            email = request.POST["contact"]
+            sub = Subscription()
+            sub.email = email
+            sub.save()
+        else:
+            fname = request.POST["first_name"]
+            lname = request.POST["last_name"]
+            email = request.POST["email"]
+            phone = request.POST["phone"]
+            messages = request.POST["message"]
+            new_message = Contact()
+            new_message.first_name=fname
+            new_message.last_name=lname
+            new_message.email=email
+            new_message.phone=phone
+            new_message.message=messages
+            new_message.save()
+
+    return render(request, 'index1.html',context)
 
 
 @login_required
