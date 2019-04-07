@@ -1,0 +1,55 @@
+
+.form-wrap {
+    margin-top: 0px;
+    margin-bottom: 80px;
+}
+
+.form-control, .checkbox {
+    position: relative;
+    height: auto;
+    padding: 10px 20px;
+    font-size: 1.5rem;
+@include box-sizing(border-box);
+    margin-bottom: 10px;
+}
+
+.confirm-password {
+    margin-top: 0;
+}
+
+.password {
+    margin-bottom: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+td {
+    text-decoration: none;
+}
+
+table a:not(.btn), .table a:not(.btn) {
+    text-decoration: none;
+}
+
+form {
+    min-width: 320px;
+    max-width: 900px;
+    padding: 15px;
+    margin: 0 auto;
+}
+
+.container {
+    max-width: 900px;
+}
+
+td.nowrap {
+    white-space: nowrap;
+}
+
+select {
+   -webkit-appearance: none;
+   -moz-appearance: none;
+   appearance: none;
+}
