@@ -1,0 +1,26 @@
+.sign-in, .checkbox {
+    margin-bottom: 10px;
+}
+
+.btn .btn-primary {
+    position: relative;
+    padding: 200px;
+}
+
+.btn .btn-info {
+    float: right;
+    position: relative;
+    padding: 200px;
+}
+
+input[type="text"] {
+    margin-bottom: -2px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}

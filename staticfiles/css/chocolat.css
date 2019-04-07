@@ -52,7 +52,7 @@ body{
 	text-align:center;
 	width:800px;
 	height:600px;
-	/*background:url(../images/ajax-loader.gif) center center no-repeat;*/
+
 }
 #Choco_container_description{
 	padding:0;
@@ -95,7 +95,7 @@ body{
 #Choco_loading{
 	width:9px;
 	height:11px;
-	background-image:url(../images/loading.gif);
+	
 	background-repeat:no-repeat;
 	z-index:1002;
 	cursor:pointer;

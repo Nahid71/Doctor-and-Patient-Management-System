@@ -63,7 +63,7 @@ ul{
 }
 .tit-clr{color:#fff;}
 .titl-bottom{padding-bottom:0px;}
-.banner-w3{background: url(../images/b1.jpg)no-repeat center;
+.banner-w3{background: url("../images/b1.9e9a746158d4.jpg")no-repeat center;
     background-size: cover;
     min-height: 800px;
 	
@@ -320,7 +320,7 @@ span.banner-icon {
 /*--//about--*/
 /*-- service--*/
 .services {
-    background: url(../images/b3.jpg)no-repeat center;
+    background: url("../images/b3.1ef8b39e0a77.jpg")no-repeat center;
 }
 span.font{   
  font-size: 51px;
@@ -376,7 +376,7 @@ margin:0 auto;}
 /*-- /clients --*/
 
 .testimonials {
-	background: url(../images/b4.jpg) no-repeat 0px 0px;
+	background: url("../images/b4.96b11da30913.jpg") no-repeat 0px 0px;
 	background-size: cover;
 }
 
@@ -860,7 +860,7 @@ footer p a:hover {
     height: 42px;
 	border: none;
 	text-indent: 100%;
-	background: url("../images/arr.png") no-repeat 0px 0px;
+	background: url("../images/arr.5191d9699909.png") no-repeat 0px 0px;
 	background-size: 40px;
 }
 #toTopHover {
