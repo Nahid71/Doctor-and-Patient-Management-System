@@ -38,16 +38,26 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="{% static 'images/ms-icon-144x144.png' %}">
     <meta name="theme-color" content="#ffffff">
+    <style>
+        body {
+            background-image: url('{% static 'images/ba.jpg' %}');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center center;
+        }
+    </style>
 </head>
 
 <body>
-    {% include 'navbar.html' %}
-    <div class="container">
-        {% block content %}
-        <div class="text-center">
-            <h1>Welcome to Health<strong>Net</strong>, {{ user.get_full_name }}</h1>
+    <div style="background-image: url(" {% static 'images/background.jpg' %}");">
+        {% include 'navbar.html' %}
+        <div class="container">
+            {% block content %}
+            <div class="text-center">
+                <h1>Welcome to Health<strong>Net</strong>, {{ user.get_full_name }}</h1>
+            </div>
+            {% endblock %}
         </div>
-        {% endblock %}
     </div>
 </body>
 
